@@ -247,9 +247,9 @@ app.post('/logs', async (req, res) => {
 
 // Swagger setup
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
-  console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
+  console.log(`Swagger UI is available at http://localhost:${port}`);
 });
