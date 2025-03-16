@@ -1,11 +1,19 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');  // Import CORS module
+const cors = require('cors');  
 
 const app = express();
 const port = 3000;
 
-// ฟังก์ชันดึงข้อมูล drone
+
+// Check API Status
+app.get('/', (req, res) => {
+  res.send('API running!!!');
+});
+
+
+
+// API Assignment #1 Drone Configs Sever 
 const getDroneData = async (drone_id) => {
   const url = `https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjUB1VghU97Ev2_i9G8JrmjYXughARdNKhGMEWkU29bbAbzv-CeGONJwsHtzwwHzBSFbCvkg2l8DwNt4uo0w_WHUlKPD5hhE9kqnTiGToTmG6ihhWnaVZGgYwpZ_wd5rB7dIiEBjlVYcrelqg7l3v9BDx94orSKBpOffpmZ26AV9x1igqzjbPRpdmWek2a1mIyMfbWONvhZm3q0y70D4_gueO32JZ2PnL54-T0oiqn6HFwMLolOU5FqPWCBJc_sipWx5F_Ltn_FLtkrI8dmu7Akk4yqqGZyAH9u6k6A&lib=M9_yccKOaZVEQaYjEvK1gClQlFAuFWsxN`;
   try {
@@ -25,14 +33,6 @@ const getDroneData = async (drone_id) => {
     throw new Error('Failed to fetch drone data');
   }
 };
-
-
-
-app.get('/', (req, res) => {
-  res.send('API running!!!');
-});
-
-
 
 
 app.get('/configs/:drone_id', async (req, res) => {
@@ -66,7 +66,7 @@ app.get('/status/:drone_id', async (req, res) => {
 
 
 
-
+// API Assignment #1 Drone Logs Sever
 const getDroneLogs = async (drone_id) => {
   try {
     const url = 'https://app-tracking.pockethost.io/api/collections/drone_logs/records';
@@ -94,7 +94,6 @@ const getDroneLogs = async (drone_id) => {
     throw new Error('Failed to fetch drone logs');
   }
 };
-
 
 
 app.get('/logs/:drone_id', async (req, res) => {
@@ -127,8 +126,8 @@ app.post('/logs', async (req, res) => {
   }
 });
 
-app.use(express.json());  // Middleware for reading JSON body
-app.use(cors());  // Enable CORS support
+app.use(express.json());  
+app.use(cors()); 
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
