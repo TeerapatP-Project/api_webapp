@@ -7,7 +7,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
-  "name": "web",
+  "name": "api-web",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000w\u0000e\u0000b\u0000\r\u0000 \u0000\r\u0000 \u0000",
   "main": "index.js",
