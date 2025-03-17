@@ -1,23 +1,23 @@
+require('dotenv').config(); // โหลดค่าใน .env
+
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');  
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
+const DRONE_CONFIG_URL = process.env.DRONE_CONFIG_URL;
+const DRONE_LOGS_URL = process.env.DRONE_LOGS_URL;
 
 // Check API Status
 app.get('/', (req, res) => {
   res.send('API running!!!');
 });
 
-
-
-// API Assignment #1 Drone Configs Sever 
 const getDroneData = async (drone_id) => {
-  const url = `https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjUB1VghU97Ev2_i9G8JrmjYXughARdNKhGMEWkU29bbAbzv-CeGONJwsHtzwwHzBSFbCvkg2l8DwNt4uo0w_WHUlKPD5hhE9kqnTiGToTmG6ihhWnaVZGgYwpZ_wd5rB7dIiEBjlVYcrelqg7l3v9BDx94orSKBpOffpmZ26AV9x1igqzjbPRpdmWek2a1mIyMfbWONvhZm3q0y70D4_gueO32JZ2PnL54-T0oiqn6HFwMLolOU5FqPWCBJc_sipWx5F_Ltn_FLtkrI8dmu7Akk4yqqGZyAH9u6k6A&lib=M9_yccKOaZVEQaYjEvK1gClQlFAuFWsxN`;
   try {
-    const response = await axios.get(url, { params: { drone_id } });
+    const response = await axios.get(DRONE_CONFIG_URL, { params: { drone_id } });
     if (response.data.status === 'ok') {
       const drone = response.data.data.find(d => d.drone_id == drone_id);
       if (drone) {
@@ -33,7 +33,6 @@ const getDroneData = async (drone_id) => {
     throw new Error('Failed to fetch drone data');
   }
 };
-
 
 app.get('/configs/:drone_id', async (req, res) => {
   const { drone_id } = req.params;
@@ -53,7 +52,6 @@ app.get('/status/:drone_id', async (req, res) => {
   const { drone_id } = req.params;
   try {
     const droneData = await getDroneData(drone_id);
-
     if (!droneData) {
       return res.status(404).json({ error: "Drone not found" });
     }
@@ -64,20 +62,15 @@ app.get('/status/:drone_id', async (req, res) => {
   }
 });
 
-
-
-// API Assignment #1 Drone Logs Sever
 const getDroneLogs = async (drone_id) => {
   try {
-    const url = 'https://app-tracking.pockethost.io/api/collections/drone_logs/records';
-    const response = await axios.get(url, {
+    const response = await axios.get(DRONE_LOGS_URL, {
       params: {
         filter: `drone_id=${drone_id}`,
         sort: '-created',
         limit: 25,
       }
     });
-
     if (response.data && response.data.items) {
       return response.data.items.map(log => ({
         drone_id: log.drone_id,
@@ -94,7 +87,6 @@ const getDroneLogs = async (drone_id) => {
     throw new Error('Failed to fetch drone logs');
   }
 };
-
 
 app.get('/logs/:drone_id', async (req, res) => {
   const { drone_id } = req.params;
@@ -116,9 +108,7 @@ app.post('/logs', async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const url = 'https://app-tracking.pockethost.io/api/collections/drone_logs/records';
-    const response = await axios.post(url, { drone_id, drone_name, country, celsius });
-
+    const response = await axios.post(DRONE_LOGS_URL, { drone_id, drone_name, country, celsius });
     res.status(201).json(response.data);
   } catch (error) {
     console.error('Error creating log:', error.message);
