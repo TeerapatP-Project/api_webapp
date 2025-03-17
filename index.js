@@ -109,16 +109,36 @@ app.get('/logs/:drone_id', async (req, res) => {
   }
 });
 
+app.use(express.json());
+
 app.post('/logs', async (req, res) => {
   try {
+    // ตรวจสอบว่า req.body มีข้อมูลหรือไม่
+    if (!req.body) {
+      return res.status(400).json({ error: "Missing request body" });
+    }
+
+    // รับข้อมูลจาก body
     const { drone_id, drone_name, country, celsius } = req.body;
+
+    // ตรวจสอบว่ามีค่าครบถ้วนหรือไม่
     if (!drone_id || !drone_name || !country || celsius === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    // ตั้งค่าการส่งข้อมูลไปยัง API ภายนอก
     const url = 'https://app-tracking.pockethost.io/api/collections/drone_logs/records';
-    const response = await axios.post(url, { drone_id, drone_name, country, celsius });
+    const response = await axios.post(url, 
+      { drone_id, drone_name, country, celsius }, 
+      {
+        headers: {
+          "Authorization": "Bearer 20250301efx",  // เพิ่ม Header ที่ต้องการ
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
+    // ส่งข้อมูลกลับให้ client
     res.status(201).json(response.data);
   } catch (error) {
     console.error('Error creating log:', error.message);
@@ -126,8 +146,8 @@ app.post('/logs', async (req, res) => {
   }
 });
 
-app.use(express.json());  
-app.use(cors()); 
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
