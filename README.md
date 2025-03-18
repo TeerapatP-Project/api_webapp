@@ -1,6 +1,4 @@
 # 🚀 Drone API  
-cat <<EOF > README.md
-# 🚀 Drone API  
 An API for drone configuration and logs, built with **Express.js** and deployed on **Vercel**.  
 
 📌 **GitHub Repository:**  
@@ -17,7 +15,6 @@ An API for drone configuration and logs, built with **Express.js** and deployed 
 📍 **Get drone configuration**  
 \`\`\`http
 GET /configs/:drone_id
-\`\`\`
 
 📍 **Get drone status**  
 \`\`\`http
