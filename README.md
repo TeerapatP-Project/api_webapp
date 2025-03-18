@@ -13,22 +13,23 @@ An API for drone configuration and logs, built with **Express.js** and deployed 
 
 ### ✈️ **Drone Configs**  
 📍 **Get drone configuration**  
-\`\`\`http
+```http
 GET /configs/:drone_id
+```
 
 📍 **Get drone status**  
-\`\`\`http
+```http
 GET /status/:drone_id
-\`\`\`
+```
 
 ### 📜 **Drone Logs**  
 📍 **Get the latest 25 logs for a drone**  
-\`\`\`http
+```http
 GET /logs/:drone_id
-\`\`\`
+```
 
 📍 **Add a new drone log**  
-\`\`\`http
+```http
 POST /logs
 Content-Type: application/json
 
@@ -38,7 +39,7 @@ Content-Type: application/json
   "country": "USA",
   "celsius": 25
 }
-\`\`\`
+```
 
 ---
 
@@ -47,25 +48,25 @@ Content-Type: application/json
 If you want to run this API on your local machine, follow these steps:
 
 1️⃣ **Clone this repository**  
-\`\`\`sh
+```sh
 git clone https://github.com/TeerapatP-Project/api_webapp.git
 cd api_webapp
-\`\`\`
+```
 
 2️⃣ **Install dependencies**  
-\`\`\`sh
+```sh
 npm install
-\`\`\`
+```
 
 3️⃣ **Start the server**  
-\`\`\`sh
+```sh
 node index.js
-\`\`\`
+```
 
 4️⃣ **The API will be available at:**  
-\`\`\`sh
+```sh
 http://localhost:3000
-\`\`\`
+```
 
 ---
 
